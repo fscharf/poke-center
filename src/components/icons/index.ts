@@ -1,0 +1,5 @@
+export { default as Trash } from './trash'
+export { default as AddCircle } from './add-circle'
+export { default as ArrowLeft } from './arrow-left'
+export { default as ChevronRight } from './chevron-right'
+export { default as ChevronLeft } from './chevron-left'
