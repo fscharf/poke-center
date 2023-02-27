@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { CSSObject } from 'styled-components'
 import { Button, Input, InputWrapper, Svg } from './styles'
 
 type SearchBoxProps = {
   onChange: (value: string) => void
+  css?: CSSObject
 }
 
-export default function SearchBox({ onChange }: SearchBoxProps) {
+export default function SearchBox({ onChange, css }: SearchBoxProps) {
   const [value, setValue] = useState<string>('')
 
   const handleChange = useCallback(
@@ -25,7 +27,7 @@ export default function SearchBox({ onChange }: SearchBoxProps) {
   }, [value])
 
   return (
-    <InputWrapper data-testid="search-box">
+    <InputWrapper data-testid="search-box" css={css}>
       <Svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

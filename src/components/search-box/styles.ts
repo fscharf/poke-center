@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled, { CSSObject } from 'styled-components'
 
-export const InputWrapper = styled.div`
+export const InputWrapper = styled.div<{ css?: CSSObject }>`
   display: flex;
   gap: 8px;
   align-items: center;
@@ -9,10 +9,13 @@ export const InputWrapper = styled.div`
   border-radius: 16px;
   padding: 24px;
   margin: 16px 0;
+  box-shadow: 0 3px 15px rgba(70, 70, 70, 0.4);
 
   @media screen and (max-width: 768px) {
     padding: 16px;
   }
+
+  ${props => props.css}
 `
 
 export const Button = styled.button`

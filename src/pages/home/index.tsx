@@ -1,30 +1,12 @@
 import { PokemonList, Party, SearchBox } from 'components'
 import { usePokemon } from 'contexts/pokemon'
+import { useWindow } from 'hooks'
 import styled from 'styled-components'
-
-const Wrapper = styled.section`
-  display: flex;
-  justify-content: center;
-`
-
-const Container = styled.div`
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-
-  @media screen and (max-width: 450px) {
-    flex-direction: column-reverse;
-  }
-`
-
-const Content = styled.section`
-  display: flex;
-  gap: 16px;
-`
+import { Container, Content, Wrapper } from './styles'
 
 export default function Home() {
   const { handleSearch } = usePokemon()
+  const { width } = useWindow()
 
   return (
     <Wrapper>
@@ -33,7 +15,14 @@ export default function Home() {
           <Party />
           <PokemonList />
         </Content>
-        <SearchBox onChange={handleSearch} />
+        <SearchBox
+          onChange={handleSearch}
+          css={
+            width >= 768
+              ? { position: 'absolute', bottom: '24px', maxWidth: '1200px' }
+              : {}
+          }
+        />
       </Container>
     </Wrapper>
   )
