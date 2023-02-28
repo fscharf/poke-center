@@ -13,9 +13,5 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, { wrapper, ...options })
 
-// function customRenderHook<T>(hook: any) {
-//   return renderHook<any, T>(hook, { wrapper })
-// }
-
 export * from '@testing-library/react'
 export { customRender as render, renderHook, act as hookAct }
