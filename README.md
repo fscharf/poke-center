@@ -3,7 +3,7 @@
 Poke Center is a React application made with TypeScript and styled-components.
 You can manage a Poke Party with the pokémons available by [PokeAPI](https://pokeapi.co/).
 
-![Wallpaper](https://i.imgur.com/1wytsn8.jpg)
+![Wallpaper](https://i.imgur.com/dUv2WBz.jpg)
 
 ## Installation
 
