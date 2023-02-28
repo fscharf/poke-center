@@ -1,10 +1,10 @@
+import { Box, PokemonInfo } from 'components'
+import { Trash } from 'components/icons'
 import { usePokemon } from 'contexts/pokemon'
 import { useWindow } from 'hooks'
-import { Trash } from 'components/icons'
-import { Box, PokemonInfo } from 'components'
 import { Counter, PartyHeader, PartyWrapper, Wrapper } from './styles'
 
-export default function Party() {
+export default function PokemonParty() {
   const { pickedPokemons, removePicked } = usePokemon()
   const { width } = useWindow()
 
@@ -23,6 +23,7 @@ export default function Party() {
                 justifyContent: width <= 425 ? 'center' : 'initial',
                 border: '8px double #3894fd',
                 height: 'max-content',
+                gap: '8px',
                 flexDirection: width <= 425 ? 'column' : 'initial',
                 textAlign: width <= 425 ? 'center' : 'initial'
               }}

@@ -4,6 +4,7 @@ export const Wrapper = styled.article`
   display: flex;
   flex-direction: column;
   flex: 3;
+  gap: 16px;
 
   @media screen and (max-width: 450px) {
     flex: 2;
@@ -12,7 +13,7 @@ export const Wrapper = styled.article`
 `
 
 export const BoxHeader = styled.header`
-  padding: 22px;
+  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -26,9 +27,9 @@ export const BoxWrapper = styled.section`
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
   gap: 16px;
-  padding: 16px 0;
-  height: 75vh;
+  padding-bottom: 16px;
   overflow-y: auto;
+  height: 75vh;
 
   @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
@@ -51,8 +52,8 @@ export const Button = styled.button`
   }
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
   }
 `
 

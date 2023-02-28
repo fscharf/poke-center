@@ -7,13 +7,8 @@ export const InputWrapper = styled.div<{ css?: CSSObject }>`
   background: #e5e5e5;
   width: 100%;
   border-radius: 16px;
-  padding: 24px;
-  margin: 16px 0;
+  padding: 14px;
   box-shadow: 0 3px 15px rgba(70, 70, 70, 0.4);
-
-  @media screen and (max-width: 768px) {
-    padding: 16px;
-  }
 
   ${props => props.css}
 `
@@ -28,6 +23,6 @@ export const Input = styled.input`
 `
 
 export const Svg = styled.svg`
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
 `

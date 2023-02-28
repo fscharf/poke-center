@@ -10,10 +10,9 @@ export const Wrapper = styled.div<{ css?: CSSObject }>`
   border-radius: 16px;
   position: relative;
   min-height: 150px;
-  height: 100%;
 
   @media screen and (max-width: 450px) {
-    min-height: 100px;
+    min-height: 125px;
   }
 
   ${props => props.css}
@@ -24,19 +23,12 @@ export const IconButton = styled.button`
   top: 8px;
   right: 8px;
 
-  svg {
-    width: 32px;
-    height: 32px;
+  * {
+    width: 24px;
+    height: 24px;
   }
 
   &:hover {
     opacity: 0.6;
-  }
-
-  @media screen and (max-width: 450px) {
-    svg {
-      width: 24px;
-      height: 24px;
-    }
   }
 `

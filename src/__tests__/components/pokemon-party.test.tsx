@@ -1,10 +1,10 @@
-import { Party } from 'components'
+import { PokemonParty } from 'components'
 import * as context from 'contexts/pokemon'
 import { Pokemon } from 'services/pokemon'
 import { fireEvent, render, screen } from 'utils/test-utils'
 import { pokemonMock } from '__mocks__/pokemon-mock'
 
-describe('Party component test', () => {
+describe('PokemonParty component test', () => {
   beforeEach(jest.clearAllMocks)
 
   const pokemon: Pokemon = {
@@ -25,7 +25,7 @@ describe('Party component test', () => {
   it('should render correctly', () => {
     mockContext()
 
-    render(<Party />)
+    render(<PokemonParty />)
 
     expect(screen.getByText(/Pokemon test/)).toBeInTheDocument()
     expect(screen.getByText(/200/)).toBeInTheDocument()
@@ -36,7 +36,7 @@ describe('Party component test', () => {
     const removePickedSpy = jest.fn()
     mockContext({ removePicked: removePickedSpy })
 
-    render(<Party />)
+    render(<PokemonParty />)
 
     expect(screen.getByText(/Pokemon test/)).toBeInTheDocument()
 
@@ -50,7 +50,7 @@ describe('Party component test', () => {
     global.innerWidth = 420
     mockContext()
 
-    render(<Party />)
+    render(<PokemonParty />)
 
     expect(screen.getByText(/Pokemon test/)).toBeInTheDocument()
     expect(screen.getByText(/200/)).toBeInTheDocument()

@@ -13,7 +13,7 @@ export const Wrapper = styled.article`
 `
 
 export const PartyHeader = styled.header`
-  padding: 24px;
+  padding: 16px;
   background: #e5e5e5;
   border-radius: 16px;
   display: flex;
@@ -27,9 +27,10 @@ export const Counter = styled.span`
 `
 
 export const PartyWrapper = styled.section`
-  height: 75vh;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+  padding-bottom: 16px;
+  height: 75vh;
   overflow-y: auto;
 `
