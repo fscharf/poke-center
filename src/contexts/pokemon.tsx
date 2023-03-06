@@ -1,6 +1,7 @@
 import { useStorage } from 'hooks'
+import { Pokemon, PokemonResponse } from 'models/pokemon'
 import React, { createContext, useEffect, useMemo, useState } from 'react'
-import { Pokemon, PokemonResponse, PokemonService } from 'services/pokemon'
+import { PokemonService } from 'services/pokemon'
 
 export type PokemonContextType = {
   pokemons: Pokemon[]

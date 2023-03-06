@@ -1,19 +1,29 @@
 import { Box, PokemonInfo } from 'components'
 import { Trash } from 'components/icons'
-import { usePokemon } from 'contexts/pokemon'
 import { useWindow } from 'hooks'
+import { useEffect, useRef } from 'react'
+import { actions, useAppDispatch, useAppSelector } from 'store'
 import { Counter, PartyHeader, PartyWrapper, Wrapper } from './styles'
 
 export default function PokemonParty() {
-  const { pickedPokemons, removePicked } = usePokemon()
+  const { pickedPokemons } = useAppSelector(state => state.pokemon)
   const { width } = useWindow()
+  const dispatch = useAppDispatch()
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTo(0, ref.current.scrollHeight)
+    }
+  }, [pickedPokemons])
 
   return (
     <Wrapper>
       <PartyHeader>
         <h2>Party</h2> <Counter>{pickedPokemons.length}/6</Counter>
       </PartyHeader>
-      <PartyWrapper>
+      <PartyWrapper ref={ref}>
         {pickedPokemons.map(pokemon => {
           return (
             <Box
@@ -27,7 +37,7 @@ export default function PokemonParty() {
                 flexDirection: width <= 425 ? 'column' : 'initial',
                 textAlign: width <= 425 ? 'center' : 'initial'
               }}
-              onClick={() => removePicked(pokemon.id)}
+              onClick={() => dispatch(actions.pokemon.removePicked(pokemon.id))}
               icon={<Trash />}
             >
               <PokemonInfo

@@ -1,6 +1,6 @@
 import { PokemonList } from 'components'
 import * as context from 'contexts/pokemon'
-import { Pokemon } from 'services/pokemon'
+import { Pokemon } from 'models/pokemon'
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils'
 import { pokemonMock } from '__mocks__/pokemon-mock'
 
