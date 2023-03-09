@@ -1,8 +1,8 @@
 import { PokemonList } from 'components'
-import * as context from 'contexts/pokemon'
-import { Pokemon } from 'services/pokemon'
-import { fireEvent, render, screen, waitFor } from 'utils/test-utils'
-import { pokemonMock } from '__mocks__/pokemon-mock'
+import { Pokemon } from 'models/pokemon'
+import * as store from 'store'
+import { State } from 'store/pokemon'
+import { fireEvent, render, screen } from 'utils/test-utils'
 
 describe('PokemonList component test', () => {
   beforeEach(jest.clearAllMocks)
@@ -14,115 +14,81 @@ describe('PokemonList component test', () => {
     sprites: { front_default: 'test.png' }
   }
 
-  const mockContext = (data?: Partial<typeof pokemonMock>) => {
-    jest.spyOn(context, 'usePokemon').mockImplementation(() => ({
-      ...pokemonMock,
+  jest.spyOn(store, 'useAppDispatch').mockReturnValue(jest.fn())
+  const state = store.default.getState().pokemon
+
+  const mockState = (data?: Partial<State>) => {
+    jest.spyOn(store.selectors.pokemon, 'getState').mockReturnValue({
+      ...state,
       pokemons: [pokemon],
       ...data
-    }))
+    })
   }
 
   it('should render correctly', async () => {
-    mockContext()
-
+    mockState()
     render(<PokemonList />)
-
     expect(screen.getByText(/bulbasaur/)).toBeInTheDocument()
     expect(screen.getByText(/200/)).toBeInTheDocument()
     expect(screen.getByTestId('pokemon-image')).toBeInTheDocument()
   })
   it('should show not found label if no results found in search box', () => {
-    mockContext({ notFound: true })
-
+    mockState({ isNotFound: true })
     render(<PokemonList />)
-
     expect(screen.getByText(/Nothing was found :\(/)).toBeInTheDocument()
     expect(screen.getByText(/Back to list/)).toBeInTheDocument()
   })
   it('should return to list by clicking on button if no results found', () => {
-    const handleSearchSpy = jest.fn()
-
-    mockContext({ notFound: true, handleSearch: handleSearchSpy })
-
+    const searchSpy = jest.spyOn(store.thunks.pokemon, 'search')
+    mockState({ isNotFound: true })
     render(<PokemonList />)
-
     const button = screen.getByText(/Back to list/)
     fireEvent.click(button)
-
-    expect(handleSearchSpy).toBeCalledWith('')
+    expect(searchSpy).toBeCalledTimes(1)
   })
   it('should go to next page', () => {
-    const handleNextSpy = jest.fn()
-
-    mockContext({ handleNext: handleNextSpy })
-
+    const getPokemonsSpy = jest.spyOn(store.thunks.pokemon, 'getPokemons')
+    mockState({ next: 'next.url' })
     render(<PokemonList />)
-
     const button = screen.getByTestId('next-page')
     fireEvent.click(button)
-
-    expect(handleNextSpy).toBeCalledTimes(1)
+    expect(getPokemonsSpy).toBeCalledWith({ url: 'next.url' })
   })
   it('should go to previous page if currentPage is more than 1', () => {
-    const handlePreviousSpy = jest.fn()
-
-    mockContext({
-      handlePrevious: handlePreviousSpy,
-      currentPage: 2
-    })
-
+    const getPokemonsSpy = jest.spyOn(store.thunks.pokemon, 'getPokemons')
+    mockState({ previous: 'previous.url', currentPage: 2 })
     render(<PokemonList />)
-
-    const previousButton = screen.getByTestId('previous-page')
-    fireEvent.click(previousButton)
-
-    expect(handlePreviousSpy).toBeCalledTimes(1)
+    const button = screen.getByTestId('previous-page')
+    fireEvent.click(button)
+    expect(getPokemonsSpy).toBeCalledWith({ url: 'previous.url' })
   })
   it('should load skeleton before fetching is done', () => {
-    mockContext({
-      isLoading: true
-    })
-
+    mockState({ isLoading: true })
     render(<PokemonList />)
-
     expect(screen.queryByText(/bulbasaur/)).not.toBeInTheDocument()
     expect(screen.queryByText(/200/)).not.toBeInTheDocument()
   })
   it('should show an empty box if the pokemon has picked', () => {
-    mockContext({
+    mockState({
       pickedPokemons: [pokemon]
     })
-
     render(<PokemonList />)
-
     expect(screen.getByTestId('empty-box')).toBeInTheDocument()
   })
   it('should add a pokemon to picked list', () => {
-    const addPickedSpy = jest.fn()
-
-    mockContext({
-      addPicked: addPickedSpy
-    })
-
+    const addPickedSpy = jest.spyOn(store.actions.pokemon, 'addPicked')
+    mockState()
     render(<PokemonList />)
-
-    const trigger = screen.getByTestId('add-pokemon')
-    fireEvent.click(trigger)
-
+    const button = screen.getByTestId('add-pokemon')
+    fireEvent.click(button)
     expect(addPickedSpy).toBeCalledTimes(1)
   })
   it('should not add new picks if picked list is full', () => {
-    const addPickedSpy = jest.fn()
-
-    mockContext({
-      isPickedFull: true
+    mockState({
+      pickedPokemons: Array.from({ length: 6 }).map(() => pokemon)
     })
-
     render(<PokemonList />)
-
-    const trigger = screen.getByTestId('add-pokemon')
-    fireEvent.click(trigger)
-
-    expect(addPickedSpy).not.toBeCalled()
+    const button = screen.queryByTestId('add-pokemon')
+    expect(button).not.toBeInTheDocument()
   })
 })

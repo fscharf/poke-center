@@ -1,14 +1,14 @@
 import { PokemonList, PokemonParty, SearchBox } from 'components'
-import { usePokemon } from 'contexts/pokemon'
+import { useAppDispatch, thunks } from 'store'
 import { Container, Content, Wrapper } from './styles'
 
 export default function Home() {
-  const { handleSearch } = usePokemon()
+  const dispatch = useAppDispatch()
 
   return (
     <Wrapper>
       <Container>
-        <SearchBox onChange={handleSearch} />
+        <SearchBox onChange={value => dispatch(thunks.pokemon.search(value))} />
         <Content>
           <PokemonParty />
           <PokemonList />

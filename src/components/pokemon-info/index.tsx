@@ -1,5 +1,4 @@
-import React from 'react'
-import styled, { CSSObject } from 'styled-components'
+import { CSSObject } from 'styled-components'
 import { Exp, Img, InfoWrapper, Label } from './styles'
 
 type PokemonInfoProps = {

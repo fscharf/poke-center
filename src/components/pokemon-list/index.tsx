@@ -1,12 +1,19 @@
-import { usePokemon } from 'contexts/pokemon'
-import Skeleton from 'react-loading-skeleton'
+import { Box, PokemonInfo } from 'components'
 import {
   AddCircle,
   ArrowLeft,
   ChevronLeft,
   ChevronRight
 } from 'components/icons'
-import { Box, PokemonInfo } from 'components'
+import { useCallback, useEffect } from 'react'
+import Skeleton from 'react-loading-skeleton'
+import {
+  actions,
+  selectors,
+  thunks,
+  useAppDispatch,
+  useAppSelector
+} from 'store'
 import {
   BackToListButton,
   BoxHeader,
@@ -17,38 +24,47 @@ import {
 } from './styles'
 
 export default function PokemonList() {
+  const dispatch = useAppDispatch()
+
   const {
     pokemons,
-    handleNext,
-    handlePrevious,
-    currentPage,
-    addPicked,
-    pickedPokemons,
-    handleSearch,
-    notFound,
     isLoading,
-    isPickedFull
-  } = usePokemon()
+    previous,
+    next,
+    currentPage,
+    pickedPokemons,
+    isNotFound
+  } = useAppSelector(selectors.pokemon.getState)
+
+  const isPickedFull = useAppSelector(selectors.pokemon.isPickedFull)
+
+  const changePage = useCallback((url: string) => {
+    dispatch(thunks.pokemon.getPokemons({ url }))
+  }, [])
+
+  useEffect(() => {
+    dispatch(thunks.pokemon.getPokemons())
+  }, [])
 
   return (
     <Wrapper>
       <BoxHeader>
         <Button
           data-testid="previous-page"
-          onClick={handlePrevious}
+          onClick={() => changePage(previous)}
           disabled={currentPage === 1}
         >
           <ChevronLeft />
         </Button>
         <h2>Box {currentPage}</h2>
-        <Button data-testid="next-page" onClick={handleNext}>
+        <Button data-testid="next-page" onClick={() => changePage(next)}>
           <ChevronRight />
         </Button>
       </BoxHeader>
-      {notFound ? (
+      {isNotFound ? (
         <NotFoundLabel>
           <span>Nothing was found :(</span>
-          <BackToListButton onClick={() => handleSearch('')}>
+          <BackToListButton onClick={() => dispatch(thunks.pokemon.search())}>
             <ArrowLeft />
             Back to list
           </BackToListButton>
@@ -69,12 +85,12 @@ export default function PokemonList() {
                 testId="add-pokemon"
                 css={{ flexDirection: 'column' }}
                 key={pokemon.id}
-                onClick={() => addPicked(pokemon)}
+                onClick={() => dispatch(actions.pokemon.addPicked(pokemon))}
                 icon={isPickedFull ? null : <AddCircle />}
               >
                 <PokemonInfo
                   name={pokemon.name}
-                  imageUrl={pokemon.sprites.front_default}
+                  imageUrl={pokemon.sprites?.front_default}
                   exp={pokemon.base_experience}
                   css={{ alignItems: 'center' }}
                 />
