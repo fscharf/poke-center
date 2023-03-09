@@ -5,6 +5,19 @@ You can manage a Poke Party with the pokémons available by [PokeAPI](https://po
 
 ![Wallpaper](https://i.imgur.com/dUv2WBz.jpg)
 
+## Technologies
+
+- React
+- Redux Toolkit + Redux Persist
+- Axios
+- styled-components
+- Prettier + Eslint
+- React Testing Library + Jest
+
+## Requirements 
+
+Yarn v1.22+
+
 ## Installation
 
 After cloning the repository, use `yarn install` or just `yarn` to install dependencies.
