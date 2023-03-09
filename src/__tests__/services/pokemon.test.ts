@@ -1,6 +1,6 @@
-import { Pokemon, PokemonResponse, PokemonService } from 'services/pokemon'
-
+import { PokemonService } from 'services/pokemon'
 import { httpClient } from 'config'
+import { Pokemon, PokemonResponse } from 'models/pokemon'
 
 describe('PokemonService', () => {
   const sut = new PokemonService()
@@ -12,14 +12,11 @@ describe('PokemonService', () => {
       previous: null,
       results: []
     }
-
     jest.spyOn(httpClient, 'get').mockResolvedValue({
       status: 200,
       data
     })
-
     const response = await sut.get()
-
     expect(response).toMatchObject({ status: 200, data })
   })
 
@@ -30,14 +27,11 @@ describe('PokemonService', () => {
       name: 'bulbasaur',
       sprites: { front_default: 'test.png' }
     }
-
     jest.spyOn(httpClient, 'get').mockResolvedValue({
       status: 200,
       data
     })
-
-    const response = await sut.getByUrl('/pokemon/bulbasaur')
-
+    const response = await sut.getDetails('/pokemon/bulbasaur')
     expect(response).toMatchObject({ status: 200, data })
   })
 })

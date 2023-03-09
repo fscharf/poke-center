@@ -1,11 +1,19 @@
-import { PokemonProvider } from 'contexts/pokemon'
-import React, { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { render, RenderOptions } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react-hooks'
+import React, { ReactElement } from 'react'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import store, { persistor } from 'store'
 
 const wrapper = ({ children }: React.PropsWithChildren) => {
-  return <PokemonProvider>{children}</PokemonProvider>
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        {children}
+      </PersistGate>
+    </Provider>
+  )
 }
 
 const customRender = (

@@ -5,7 +5,7 @@ import {
   RemotePokemonResponse
 } from 'models/pokemon'
 import { pokemonService } from 'services'
-import { State } from './slice'
+import { actions, State } from './slice'
 
 const handleResult = async (results: PokemonResponseResult[]) => {
   return await Promise.all(
@@ -32,7 +32,7 @@ export const search = createAsyncThunk<Pokemon[] | undefined, string | void>(
 
     const pokemons = await handleResult(filteredPokemons)
 
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       if (pokemons.length) {
         resolve(pokemons)
       } else {
@@ -42,17 +42,6 @@ export const search = createAsyncThunk<Pokemon[] | undefined, string | void>(
   }
 )
 
-export const getCurrentPage = createAsyncThunk<
-  number,
-  { url: string; count: number }
->('pokemon/getCurrentPage', ({ url, count }) => {
-  const { searchParams } = new URL(url)
-  const offset = Number(searchParams.get('offset'))
-  const limit = Number(searchParams.get('limit'))
-  const currentPage = offset >= count ? -1 : offset / limit + 1
-  return currentPage
-})
-
 export const getPokemons = createAsyncThunk<
   RemotePokemonResponse,
   { url?: string; limit?: number } | void
@@ -60,15 +49,14 @@ export const getPokemons = createAsyncThunk<
   const response = await pokemonService.get(params?.url, params?.limit)
   const pokemons = await handleResult(response.data.results)
 
-  dispatch(
-    getCurrentPage({
-      url: params?.url || 'url.com?offset=0&limit=16',
-      count: response.data.count
-    })
-  )
+  if (params?.url) {
+    dispatch(
+      actions.getCurrentPage({ url: params.url, count: response.data.count })
+    )
+  }
 
   return {
-    next: response.data.next || '',
+    next: response.data.next,
     previous: response.data.previous || '',
     count: response.data.count,
     pokemons
@@ -87,9 +75,6 @@ export const extraReducers = (builder: ActionReducerMapBuilder<State>) => {
   })
   builder.addCase(getPokemons.rejected, state => {
     state.isLoading = false
-  })
-  builder.addCase(getCurrentPage.fulfilled, (state, action) => {
-    state.currentPage = action.payload
   })
   builder.addCase(search.pending, state => {
     state.isLoading = true

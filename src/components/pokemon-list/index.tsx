@@ -5,7 +5,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'components/icons'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import {
   actions,
@@ -34,28 +34,30 @@ export default function PokemonList() {
     currentPage,
     pickedPokemons,
     isNotFound
-  } = useAppSelector(state => state.pokemon)
+  } = useAppSelector(selectors.pokemon.getState)
+
+  const isPickedFull = useAppSelector(selectors.pokemon.isPickedFull)
+
+  const changePage = useCallback((url: string) => {
+    dispatch(thunks.pokemon.getPokemons({ url }))
+  }, [])
 
   useEffect(() => {
     dispatch(thunks.pokemon.getPokemons())
   }, [])
-
-  const isPickedFull = useAppSelector(selectors.pokemon.isPickedFull)
-  const handlePage = (url: string) =>
-    dispatch(thunks.pokemon.getPokemons({ url }))
 
   return (
     <Wrapper>
       <BoxHeader>
         <Button
           data-testid="previous-page"
-          onClick={() => handlePage(previous)}
+          onClick={() => changePage(previous)}
           disabled={currentPage === 1}
         >
           <ChevronLeft />
         </Button>
         <h2>Box {currentPage}</h2>
-        <Button data-testid="next-page" onClick={() => handlePage(next)}>
+        <Button data-testid="next-page" onClick={() => changePage(next)}>
           <ChevronRight />
         </Button>
       </BoxHeader>

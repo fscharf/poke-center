@@ -2,11 +2,11 @@ import { Box, PokemonInfo } from 'components'
 import { Trash } from 'components/icons'
 import { useWindow } from 'hooks'
 import { useEffect, useRef } from 'react'
-import { actions, useAppDispatch, useAppSelector } from 'store'
+import { actions, selectors, useAppDispatch, useAppSelector } from 'store'
 import { Counter, PartyHeader, PartyWrapper, Wrapper } from './styles'
 
 export default function PokemonParty() {
-  const { pickedPokemons } = useAppSelector(state => state.pokemon)
+  const { pickedPokemons } = useAppSelector(selectors.pokemon.getState)
   const { width } = useWindow()
   const dispatch = useAppDispatch()
 

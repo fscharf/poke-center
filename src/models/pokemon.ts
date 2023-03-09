@@ -1,5 +1,5 @@
 export type PokemonResponse = {
-  next: string | null
+  next: string
   previous: string | null
   count: number
   results: PokemonResponseResult[]

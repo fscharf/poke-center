@@ -33,6 +33,17 @@ export const slice = createSlice({
       state.pickedPokemons = state.pickedPokemons.filter(
         pokemon => pokemon.id !== action.payload
       )
+    },
+    getCurrentPage: (
+      state,
+      action: PayloadAction<{ url: string; count: number }>
+    ) => {
+      const { count, url } = action.payload
+      const { searchParams } = new URL(url)
+      const offset = Number(searchParams.get('offset'))
+      const limit = Number(searchParams.get('limit'))
+      const currentPage = offset >= count ? -1 : offset / limit + 1
+      state.currentPage = currentPage
     }
   },
   extraReducers

@@ -7,3 +7,5 @@ export const isPickedFull = createSelector(
   rootSelect,
   state => state.pickedPokemons.length === 6
 )
+
+export const getState = createSelector(rootSelect, state => state)
